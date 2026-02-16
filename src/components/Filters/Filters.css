@@ -1,0 +1,201 @@
+/* =========================================
+   Filters Component (Mobile First)
+   ========================================= */
+.filters-container {
+  background-color: #121212;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 85%;
+  max-width: 320px;
+  z-index: 1001;
+  transform: translateX(-100%);
+  transition: transform 0.3s ease-in-out;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+  font-family: 'Inter', sans-serif;
+}
+
+.filters-container.is-open {
+  transform: translateX(0);
+}
+
+.filters-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  z-index: 1000;
+  backdrop-filter: blur(4px);
+}
+
+.filters-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  flex-shrink: 0;
+}
+
+.filters-header-title {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 1.2rem;
+  font-weight: 600;
+  /* Aplicamos el degradado del HeroSection */
+  background: linear-gradient(90deg, #00E5FF 50%, #FF007A 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.close-filters-btn {
+  background: none;
+  border: none;
+  color: #888;
+  cursor: pointer;
+  padding: 0.5rem;
+  display: flex;
+  transition: color 0.2s;
+}
+
+.close-filters-btn:hover {
+  color: #fff;
+}
+
+.filters-body {
+  padding: 1.5rem;
+  overflow-y: auto;
+  flex-grow: 1;
+}
+
+.filter-group {
+  position: relative; /* Necesario para el pseudo-elemento */
+  background-color: #1a1a1a;
+  padding: 1.25rem;
+  border-radius: 16px;
+  margin-bottom: 1.5rem;
+  border: 1px solid transparent; /* Ocultamos el borde original pero mantenemos el espacio */
+  z-index: 0; /* Asegura que el contenido esté sobre el borde */
+}
+
+/* Creamos el borde con degradado usando un pseudo-elemento */
+.filter-group::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  border-radius: inherit; /* Usa el mismo radio de borde que el contenedor */
+  padding: 1px; /* Este es el grosor de nuestro borde */
+  background: linear-gradient(135deg, #00E5FF, #FF007A);
+  -webkit-mask:
+     linear-gradient(#fff 0 0) content-box,
+     linear-gradient(#fff 0 0);
+  mask:
+     linear-gradient(#fff 0 0) content-box,
+     linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+  pointer-events: none; /* Permite que los clics lleguen a los botones de abajo */
+}
+
+.filter-group:last-of-type {
+  margin-bottom: 0;
+}
+
+.filter-title {
+  font-size: 1rem;
+  font-weight: 700;
+  /* Aplicamos el degradado del HeroSection */
+  background: linear-gradient(180deg, #00E5FF 0%, #FF007A 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  margin-bottom: 1rem;
+  margin-top: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.filter-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.filter-pill {
+  font-family: "Inter", sans-serif;
+  background-color: #2a2a2a;
+  color: #e0e0e0;
+  border: 1px solid #444;
+  border-radius: 20px;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.filter-pill:hover {
+  background-color: #3a3a3a;
+  border-color: #666;
+}
+
+.filter-pill.active {
+  background-color: #00D1FF;
+  color: #121212;
+  border-color: #00D1FF;
+  font-weight: 700;
+}
+
+/* =========================================
+   Custom Scrollbar
+   ========================================= */
+.filters-body::-webkit-scrollbar {
+  width: 8px; /* Ancho de la barra de scroll */
+}
+
+.filters-body::-webkit-scrollbar-track {
+  background: #1a1a1a; /* Color de fondo del "camino" del scroll */
+  border-radius: 10px;
+}
+
+.filters-body::-webkit-scrollbar-thumb {
+  background-color: #00E5FF; /* Color cian neón para la barra móvil */
+  border-radius: 10px;
+}
+
+.filters-body::-webkit-scrollbar-thumb:hover {
+  background-color: #FF007A; /* Cambia a rosa neón al pasar el ratón */
+}
+
+/* =========================================
+   Desktop Styles (>= 1024px)
+   ========================================= */
+@media (min-width: 1024px) {
+  .filters-container {
+    position: sticky;
+    top: 20px; /* As requested */
+    transform: translateX(0);
+    height: calc(100vh - 40px); /* Adjust height to account for top offset */
+    max-width: 25%; /* Fixed width for desktop */
+    flex-shrink: 0;
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  /* Hide mobile-only elements on desktop */
+  .filters-backdrop,
+  .close-filters-btn {
+    display: none;
+  }
+
+  .filters-header {
+    padding: 1.5rem;
+  }
+}

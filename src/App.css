@@ -1,0 +1,237 @@
+#root {
+  background-color: #0a0a0a;
+}
+
+.app-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  /* Un color de fondo oscuro coherente con el HeroSection y las GameCards */
+  background-color: #0a0a0a;
+}
+
+/* Contenedor principal centrado y con límites */
+main {
+  flex-grow: 1; /* Permite que el contenido principal crezca */
+  padding: 1rem;
+  box-sizing: border-box;
+}
+
+.content-area {
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column; /* Mobile first: filtros y contenido en una columna */
+  gap: 1.5rem;
+}
+
+@media (min-width: 1024px) {
+  .content-area {
+    flex-direction: row; /* Desktop: filtros al lado del contenido */
+  }
+}
+
+
+/* Grid Layout - Mobile First (Base: 1 columna) */
+ul {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* Desktop: 4 columnas (Requerimiento específico) */
+@media (min-width: 1024px) {
+  ul {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem; /* Mayor espaciado para aprovechar la pantalla grande */
+  }
+
+  .content-area{
+    max-width: 80%;
+  }
+}
+
+/* Botón Cargar Más */
+.load-more-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 3rem;
+  width: 100%;
+  padding-bottom: 2rem;
+}
+
+.load-more-button {
+  background-color: transparent;
+  color: #00E5FF;
+  border: 2px solid #00E5FF;
+  border-radius: 50px;
+  padding: 0.8rem 2.5rem;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: all 0.3s ease;
+}
+
+.load-more-button:hover {
+  background-color: #00E5FF;
+  color: #0a0a0a;
+  box-shadow: 0 0 15px rgba(0, 229, 255, 0.4);
+  transform: translateY(-2px);
+}
+
+/* Botón Volver Arriba */
+.scroll-top-button {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  width: 3rem;
+  height: 3rem;
+  background-color: #00E5FF;
+  color: #0a0a0a;
+  border: none;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(0, 229, 255, 0.3);
+  z-index: 100;
+  transition: transform 0.3s ease, background-color 0.3s ease;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.scroll-top-button:hover {
+  background-color: #fff;
+  transform: translateY(-5px);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* =========================================
+   Loading Screen (Skull Theme)
+   ========================================= */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  background-color: #0a0a0a;
+  color: #00E5FF;
+  gap: 1.5rem;
+  width: 100%;
+}
+
+.skull-loader {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.skull-icon {
+  width: 40px;
+  height: 40px;
+  color: #fff;
+  z-index: 2;
+  animation: pulse-skull 2s infinite ease-in-out;
+}
+
+.spinner-ring {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border: 4px solid rgba(0, 229, 255, 0.1);
+  border-top-color: #00E5FF;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes pulse-skull {
+  0%, 100% { transform: scale(1); opacity: 0.8; }
+  50% { transform: scale(1.1); opacity: 1; }
+}
+
+/* =========================================
+   No Results Screen
+   ========================================= */
+.no-results-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  min-height: 50vh; /* Ocupa una buena porción de la pantalla */
+  padding: 2rem;
+  color: #ccc;
+  gap: 1rem;
+  font-family: "Inter", sans-serif;
+}
+
+.no-results-icon {
+  color: #FF007A; /* Rosa neón para el ícono */
+  margin-bottom: 1rem;
+  opacity: 0.8;
+}
+
+.no-results-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #fff;
+  margin: 0;
+}
+
+.no-results-text strong {
+  color: #00E5FF; /* Cian para el término de búsqueda */
+  font-weight: 600;
+}
+
+.no-results-suggestion {
+  color: #888;
+  max-width: 400px;
+  font-weight: 600;
+}
+
+/* =========================================
+   Mobile Filter Toggle Button
+   ========================================= */
+.mobile-filter-toggle {
+  position: fixed;
+  bottom: 6rem; /* Posicionado sobre el botón de scroll-top */
+  right: 2rem;
+  background-color: #FF007A; /* Rosa neón para destacar */
+  color: #fff;
+  border: none;
+  border-radius: 50px;
+  padding: 0.8rem 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  z-index: 99;
+  box-shadow: 0 4px 20px rgba(255, 0, 122, 0.4);
+  transition: all 0.3s ease;
+}
+
+.mobile-filter-toggle:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 25px rgba(255, 0, 122, 0.5);
+}
+
+@media (min-width: 1024px) {
+  .mobile-filter-toggle {
+    display: none; /* Ocultar en desktop */
+  }
+}

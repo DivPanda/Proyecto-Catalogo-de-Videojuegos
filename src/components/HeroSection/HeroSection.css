@@ -1,0 +1,166 @@
+/* =========================================
+   Mobile First Styles (Base)
+   ========================================= */
+.hero-section {
+  position: relative;
+  width: 100%;
+  min-height: 40vh; /* Altura suficiente para móviles */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  font-family: 'Inter', sans-serif;
+  padding: 2rem 1rem;
+  box-sizing: border-box;
+  color: #fff;
+}
+
+/* Imagen de fondo desenfocada */
+.hero-bg-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  /* Placeholder temático gaming/espacial */
+  background-image: url('https://images.unsplash.com/photo-1538481199705-c710c4e965fc?q=80&w=2000&auto=format&fit=crop');
+  background-size: cover;
+  background-position: center;
+  filter: blur(6px); /* Desenfoque sutil */
+  z-index: 0;
+  transform: scale(1.1); /* Evita bordes blancos por el blur */
+}
+
+/* Degradado oscuro sobre la imagen */
+.hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to bottom, rgba(10, 10, 10, 0.7), rgba(5, 5, 5, 0.95));
+  z-index: 1;
+}
+
+/* Contenedor de contenido (Texto + Buscador) */
+.hero-content {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 2rem;
+}
+
+/* Título con degradado Cian -> Rosa */
+.hero-title {
+  font-size: 2.5rem;
+  font-weight: 900;
+  margin: 0;
+  line-height: 1.1;
+  background: linear-gradient(90deg, #00E5FF 0%, #FF007A 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+}
+
+.hero-subtitle {
+  color: #ccc;
+  font-size: 1.2rem;
+  margin: 0.5rem 0 0 0;
+  font-weight: 400;
+}
+
+/* Barra de búsqueda (Pills Shape) */
+.search-container {
+  display: flex;
+  align-items: center;
+  width: 95%; /* Mobile: Ocupa casi todo el ancho */
+  background-color: rgba(20, 20, 20, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 50px;
+  padding: 0.4rem;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.search-icon-wrapper {
+  padding: 0 0.8rem;
+  color: #888;
+  display: flex;
+}
+
+.search-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  /* color: #fff; */
+  color: #ff4da3;
+  font-size: 1rem;
+  outline: none;
+  padding: 0.5rem 0;
+}
+
+.search-button {
+  background-color: #00E5FF; /* Cian sólido */
+  color: #0a0a0a; /* Texto oscuro */
+  border: none;
+  border-radius: 50px;
+  padding: 0.6rem 0.6rem;
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: background-color 0.2s;
+}
+
+.search-button:hover {
+  background-color: #6ff0ff;
+}
+
+/* =========================================
+   Tablet (min-width: 768px)
+   ========================================= */
+@media (min-width: 768px) {
+  .hero-title {
+    font-size: 4rem;
+  }
+
+  .search-container {
+    width: 100%;
+    max-width: 600px; /* Limitamos el ancho para que no se estire demasiado */
+    padding: 0.5rem;
+  }
+
+  .search-button {
+    padding: 0.8rem 2rem;
+    font-size: 1rem;
+  }
+}
+
+/* =========================================
+   Desktop (min-width: 1024px)
+   ========================================= */
+@media (min-width: 1024px) {
+  .hero-section {
+    min-height: 45vh; /* Más alto en escritorio */
+  }
+
+  .hero-title {
+    font-size: 5.5rem; /* Título de gran impacto */
+  }
+
+  .hero-content {
+    gap: 3rem;
+  }
+
+  /* Ajuste del overlay para simular viñeta y dejar ver bordes sutiles */
+  .hero-overlay {
+    background: radial-gradient(circle at center, rgba(10, 10, 10, 0.6) 0%, rgba(0, 0, 0, 0.95) 90%);
+  }
+}
