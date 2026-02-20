@@ -2,10 +2,12 @@
    Footer - Mobile First
    ========================================= */
 .site-footer {
-  background-color: #050505; /* Un poco más oscuro que el fondo de la app */
+  background-color: #050505;
+  /* Un poco más oscuro que el fondo de la app */
   border-top: 1px solid rgba(255, 255, 255, 0.1);
   padding: 3rem 1.5rem 1.5rem;
-  margin-top: auto; /* Empuja el footer al final si hay poco contenido */
+  margin-top: auto;
+  /* Empuja el footer al final si hay poco contenido */
   font-family: 'Inter', sans-serif;
   color: #ccc;
   position: relative;
@@ -27,6 +29,7 @@
 .footer-content {
   display: flex;
   flex-direction: column;
+  justify-content: center;
   gap: 2.5rem;
   text-align: center;
   margin-bottom: 3rem;
@@ -37,6 +40,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   gap: 0.5rem;
 }
 
@@ -63,6 +67,7 @@
   color: #888;
   margin: 0;
   max-width: 300px;
+  text-align: center;
 }
 
 /* --- Enlaces --- */
@@ -87,13 +92,6 @@
   text-shadow: 0 0 8px rgba(0, 229, 255, 0.4);
 }
 
-/* --- Social --- */
-.footer-social {
-  display: flex;
-  justify-content: center;
-  gap: 1.5rem;
-}
-
 .social-link {
   color: #888;
   transition: all 0.3s ease;
@@ -114,11 +112,13 @@
 
 /* --- Bottom --- */
 .footer-bottom {
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
-  padding-top: 1.5rem;
+  border-top: 1px solid #ffffff41;
   text-align: center;
-  font-size: 0.8rem;
-  color: #666;
+  font-size: 0.9rem;
+  color: #979595;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .heart-icon {
@@ -133,21 +133,24 @@
 @media (min-width: 768px) {
   .footer-content {
     flex-direction: row;
-    justify-content: space-between;
-    align-items: flex-start;
+    justify-content: center;
     text-align: left;
     max-width: 1200px;
     margin-left: auto;
     margin-right: auto;
   }
 
+.footer-bottom {
+  font-size: 1.2rem;
+}
+
   .footer-brand {
-    align-items: flex-start;
     max-width: 300px;
   }
 
   .footer-links {
-    flex-direction: row; /* Enlaces en horizontal o grid si prefieres */
+    flex-direction: row;
+    /* Enlaces en horizontal o grid si prefieres */
     gap: 2rem;
   }
 }

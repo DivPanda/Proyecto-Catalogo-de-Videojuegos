@@ -2,24 +2,22 @@
    Game Modal - Mobile First
    ========================================= */
 
-/* Estilos base del elemento dialog nativo */
-.game-modal {
-  background: transparent;
-  border: none;
-  padding: 0;
-  margin: auto;
-  max-width: 90vw;
+/* Nuevo contenedor overlay para reemplazar el backdrop nativo */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
   width: 100%;
-  max-height: 90vh;
-  color: #fff;
-  overflow: visible; /* Para permitir efectos fuera si fuera necesario */
-}
-
-/* El fondo desenfocado detrás del modal */
-.game-modal::backdrop {
-  background-color: rgba(0, 0, 0, 0.6);
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  box-sizing: border-box;
 }
 
 /* Contenedor principal con estilo Neón */
@@ -33,6 +31,12 @@
   overflow: hidden; /* Para recortar la imagen */
   position: relative;
   font-family: 'Inter', sans-serif;
+  
+  /* Dimensiones movidas desde .game-modal */
+  width: 100%;
+  max-width: 90vw;
+  max-height: 90vh;
+  color: #fff;
 }
 
 /* Botón de cerrar flotante */
@@ -165,14 +169,11 @@
    Desktop / Tablet Styles (>= 768px)
    ========================================= */
 @media (min-width: 768px) {
-  .game-modal {
-    max-width: 1000px;
-    width: 90%;
-  }
-
   .modal-wrapper {
     flex-direction: row; /* Grid de 2 columnas visual */
     height: 600px; /* Altura fija para desktop */
+    max-width: 1000px;
+    width: 90%;
   }
 
   /* Columna Izquierda: Imagen */

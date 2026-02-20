@@ -7,6 +7,7 @@ import Filters from "./components/Filters/Filters.jsx"
 import { SlidersHorizontal } from "lucide-react"
 import GameCardModal from "./components/GameCardModal/GameCardModal.jsx"
 import Footer from "./components/Footer/Footer.jsx"
+import { motion, AnimatePresence } from "framer-motion"
 
 function App() {
   const [games, setGames] = useState([])
@@ -97,6 +98,19 @@ function App() {
   // Juegos a mostrar según la paginación actual
   const displayedGames = filteredGames.slice(0, visibleCount)
 
+  // --- Variantes de animación para la lista de juegos ---
+  const itemVariants = {
+    // Estado inicial: invisible y 20px más abajo
+    hidden: { opacity: 0, y: 20 },
+    // Estado final: visible y en su posición original
+    visible: (i) => ({
+      opacity: 1,
+      y: 0,
+      transition: {
+        delay: (i % 20) * 0.05, // Efecto stagger calculado manualmente
+      },
+    }),
+  };
   return (
     <div className="app-wrapper">
       <HeroSection onSearch={setSearchTerm} />
@@ -131,10 +145,17 @@ function App() {
             filteredGames.length > 0 ? (
               <>
                 <ul>
-                  {displayedGames.map((game) => (
-                    <li key={game.id}>
-                    <GameCard {...game} onClick={() => setSelectedGame(game)} />
-                    </li>
+                  {displayedGames.map((game, index) => (
+                    <motion.li 
+                      key={game.id} 
+                      custom={index}
+                      variants={itemVariants}
+                      initial="hidden"
+                      whileInView="visible"
+                      viewport={{ once: true, amount: 0.1 }}
+                    >
+                      <GameCard {...game} onClick={() => setSelectedGame(game)} />
+                    </motion.li>
                   ))}
                 </ul>
                 {visibleCount < filteredGames.length && (
@@ -156,42 +177,45 @@ function App() {
               </div>
             )
           )}
+
+          <div className="sticky-buttons-container">
+            <button 
+              className="mobile-filter-toggle" 
+              onClick={() => setIsFiltersOpen(true)}
+              aria-label="Abrir filtros"
+            >
+              <SlidersHorizontal size={20} />
+              <span>Filtros</span>
+            </button>
+            {showScrollTop && (
+              <button 
+                className="scroll-top-button" 
+                onClick={scrollToTop} 
+                aria-label="Volver arriba"
+              >
+                <svg 
+                  xmlns="http://www.w3.org/2000/svg" 
+                  width="24" height="24" viewBox="0 0 24 24" 
+                  fill="none" stroke="currentColor" strokeWidth="2" 
+                  strokeLinecap="round" strokeLinejoin="round"
+                >
+                  <path d="M18 15l-6-6-6 6"/>
+                </svg>
+              </button>
+            )}
+          </div>
         </main>
       </div>
 
-      <button 
-        className="mobile-filter-toggle" 
-        onClick={() => setIsFiltersOpen(true)}
-        aria-label="Abrir filtros"
-      >
-        <SlidersHorizontal size={20} />
-        <span>Filtros</span>
-      </button>
-
-      {showScrollTop && (
-        <button 
-          className="scroll-top-button" 
-          onClick={scrollToTop} 
-          aria-label="Volver arriba"
-        >
-          <svg 
-            xmlns="http://www.w3.org/2000/svg" 
-            width="24" height="24" viewBox="0 0 24 24" 
-            fill="none" stroke="currentColor" strokeWidth="2" 
-            strokeLinecap="round" strokeLinejoin="round"
-          >
-            <path d="M18 15l-6-6-6 6"/>
-          </svg>
-        </button>
-      )}
-
       {/* Modal de Detalles del Juego */}
-      {selectedGame && (
-        <GameCardModal 
-          game={selectedGame} 
-          onClose={() => setSelectedGame(null)} 
-        />
-      )}
+      <AnimatePresence>
+        {selectedGame && (
+          <GameCardModal 
+            game={selectedGame} 
+            onClose={() => setSelectedGame(null)} 
+          />
+        )}
+      </AnimatePresence>
 
       <Footer />
     </div>

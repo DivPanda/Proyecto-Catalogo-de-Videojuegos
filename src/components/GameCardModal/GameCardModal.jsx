@@ -1,50 +1,58 @@
-import React, { useEffect, useRef } from 'react';
-import { X, Calendar, Tag } from 'lucide-react';
+import React, { useEffect } from 'react';
+import { X, Calendar } from 'lucide-react';
+import { motion } from 'framer-motion';
 import './GameCardModal.css';
 
-const GameModal = ({ game, onClose }) => {
-  const dialogRef = useRef(null);
-
+const GameCardModal = ({ game, onClose }) => {
   useEffect(() => {
-    const dialog = dialogRef.current;
-    if (!dialog) return;
+    // --- Fix para evitar el salto de contenido al ocultar la barra de scroll ---
+    // 1. Guardar los estilos originales del body
+    const originalBodyOverflow = window.getComputedStyle(document.body).overflow;
+    const originalBodyPaddingRight = window.getComputedStyle(document.body).paddingRight;
 
-    if (game) {
-      if (!dialog.open) dialog.showModal();
-      // Bloquear scroll del body
-      document.body.style.overflow = 'hidden';
-    } else {
-      dialog.close();
-      // Restaurar scroll del body
-      document.body.style.overflow = 'unset';
-    }
+    // 2. Calcular el ancho de la barra de scroll
+    const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
 
-    // Limpieza al desmontar
-    return () => {
-      document.body.style.overflow = 'unset';
+    // 3. Bloquear el scroll y compensar el espacio de la barra de scroll
+    document.body.style.overflow = 'hidden';
+    document.body.style.paddingRight = `${scrollbarWidth}px`;
+
+    // Listener para cerrar con la tecla Escape
+    const handleEsc = (e) => {
+      if (e.key === 'Escape') onClose();
     };
-  }, [game]);
+    window.addEventListener('keydown', handleEsc);
 
-  // Manejar cierre al hacer click fuera del contenido (en el backdrop)
-  const handleBackdropClick = (e) => {
-    if (e.target === dialogRef.current) {
-      onClose();
-    }
-  };
+    return () => {
+      // 4. Restaurar los estilos originales del body al desmontar
+      document.body.style.overflow = originalBodyOverflow;
+      document.body.style.paddingRight = originalBodyPaddingRight;
+      window.removeEventListener('keydown', handleEsc);
+    };
+  }, [onClose]);
 
   if (!game) return null;
 
   const genres = game.genero ? game.genero.split(',').map(g => g.trim()) : [];
 
   return (
-    <dialog 
-      ref={dialogRef} 
-      className="game-modal" 
-      onClick={handleBackdropClick}
-      onClose={onClose}
-      aria-labelledby="modal-title"
+    <motion.div 
+      className="modal-overlay"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      onClick={onClose}
+      role="dialog"
+      aria-modal="true"
     >
-      <article className="modal-wrapper">
+      <motion.article 
+        className="modal-wrapper"
+        initial={{ scale: 0.9, opacity: 0, y: 20 }}
+        animate={{ scale: 1, opacity: 1, y: 0 }}
+        exit={{ scale: 0.9, opacity: 0, y: 20 }}
+        transition={{ type: "spring", damping: 25, stiffness: 300 }}
+        onClick={(e) => e.stopPropagation()}
+      >
         <button className="modal-close-btn" onClick={onClose} aria-label="Cerrar">
           <X size={24} />
         </button>
@@ -76,9 +84,9 @@ const GameModal = ({ game, onClose }) => {
             <p>{game.descripcion || "No hay descripción disponible para este título."}</p>
           </div>
         </div>
-      </article>
-    </dialog>
+      </motion.article>
+    </motion.div>
   );
 };
 
-export default GameModal;
+export default GameCardModal;

@@ -12,7 +12,8 @@
 
 /* Contenedor principal centrado y con límites */
 main {
-  flex-grow: 1; /* Permite que el contenido principal crezca */
+  flex-grow: 1;
+  /* Permite que el contenido principal crezca */
   padding: 1rem;
   box-sizing: border-box;
 }
@@ -21,16 +22,10 @@ main {
   width: 100%;
   margin: 0 auto;
   display: flex;
-  flex-direction: column; /* Mobile first: filtros y contenido en una columna */
+  flex-direction: column;
+  /* Mobile first: filtros y contenido en una columna */
   gap: 1.5rem;
 }
-
-@media (min-width: 1024px) {
-  .content-area {
-    flex-direction: row; /* Desktop: filtros al lado del contenido */
-  }
-}
-
 
 /* Grid Layout - Mobile First (Base: 1 columna) */
 ul {
@@ -40,18 +35,6 @@ ul {
   list-style: none;
   padding: 0;
   margin: 0;
-}
-
-/* Desktop: 4 columnas (Requerimiento específico) */
-@media (min-width: 1024px) {
-  ul {
-    grid-template-columns: repeat(4, 1fr);
-    gap: 2rem; /* Mayor espaciado para aprovechar la pantalla grande */
-  }
-
-  .content-area{
-    max-width: 80%;
-  }
 }
 
 /* Botón Cargar Más */
@@ -85,9 +68,6 @@ ul {
 
 /* Botón Volver Arriba */
 .scroll-top-button {
-  position: fixed;
-  bottom: 2rem;
-  right: 2rem;
   width: 3rem;
   height: 3rem;
   background-color: #00E5FF;
@@ -99,7 +79,6 @@ ul {
   justify-content: center;
   cursor: pointer;
   box-shadow: 0 4px 15px rgba(0, 229, 255, 0.3);
-  z-index: 100;
   transition: transform 0.3s ease, background-color 0.3s ease;
   animation: fadeIn 0.3s ease-in-out;
 }
@@ -110,8 +89,15 @@ ul {
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* =========================================
@@ -156,10 +142,24 @@ ul {
   animation: spin 1s linear infinite;
 }
 
-@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 @keyframes pulse-skull {
-  0%, 100% { transform: scale(1); opacity: 0.8; }
-  50% { transform: scale(1.1); opacity: 1; }
+
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+
+  50% {
+    transform: scale(1.1);
+    opacity: 1;
+  }
 }
 
 /* =========================================
@@ -171,7 +171,8 @@ ul {
   align-items: center;
   justify-content: center;
   text-align: center;
-  min-height: 50vh; /* Ocupa una buena porción de la pantalla */
+  min-height: 50vh;
+  /* Ocupa una buena porción de la pantalla */
   padding: 2rem;
   color: #ccc;
   gap: 1rem;
@@ -179,7 +180,8 @@ ul {
 }
 
 .no-results-icon {
-  color: #FF007A; /* Rosa neón para el ícono */
+  color: #FF007A;
+  /* Rosa neón para el ícono */
   margin-bottom: 1rem;
   opacity: 0.8;
 }
@@ -192,7 +194,8 @@ ul {
 }
 
 .no-results-text strong {
-  color: #00E5FF; /* Cian para el término de búsqueda */
+  color: #00E5FF;
+  /* Cian para el término de búsqueda */
   font-weight: 600;
 }
 
@@ -206,10 +209,8 @@ ul {
    Mobile Filter Toggle Button
    ========================================= */
 .mobile-filter-toggle {
-  position: fixed;
-  bottom: 6rem; /* Posicionado sobre el botón de scroll-top */
-  right: 2rem;
-  background-color: #FF007A; /* Rosa neón para destacar */
+  background-color: #FF007A;
+  /* Rosa neón para destacar */
   color: #fff;
   border: none;
   border-radius: 50px;
@@ -220,7 +221,6 @@ ul {
   font-weight: 700;
   font-size: 1rem;
   cursor: pointer;
-  z-index: 99;
   box-shadow: 0 4px 20px rgba(255, 0, 122, 0.4);
   transition: all 0.3s ease;
 }
@@ -230,8 +230,39 @@ ul {
   box-shadow: 0 6px 25px rgba(255, 0, 122, 0.5);
 }
 
+.sticky-buttons-container {
+  position: sticky;
+  bottom: 2rem;
+  float: right;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 1rem;
+  z-index: 100;
+  width: fit-content;
+}
+
+/* Desktop: 4 columnas (Requerimiento específico) */
 @media (min-width: 1024px) {
+  ul {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+    /* Mayor espaciado para aprovechar la pantalla grande */
+  }
+
+  .content-area {
+    max-width: 80%;
+    flex-direction: row;
+    /* Desktop: filtros al lado del contenido */
+  }
+
   .mobile-filter-toggle {
-    display: none; /* Ocultar en desktop */
+    display: none;
+    /* Ocultar en desktop */
+  }
+
+  .scroll-top-button {
+    width: 3.5rem;
+    height: 3.5rem;
   }
 }
