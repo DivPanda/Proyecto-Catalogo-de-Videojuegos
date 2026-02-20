@@ -7,7 +7,17 @@ import Filters from "./components/Filters/Filters.jsx"
 import { SlidersHorizontal } from "lucide-react"
 import GameCardModal from "./components/GameCardModal/GameCardModal.jsx"
 import Footer from "./components/Footer/Footer.jsx"
+import SkeletonLoader from "./components/SkeletonLoader/SkeletonLoader.jsx"
 import { motion, AnimatePresence } from "framer-motion"
+
+// Helper para normalizar texto (quitar acentos y a minúsculas) para una búsqueda más flexible
+const normalizeString = (str) => {
+  if (!str) return "";
+  return str
+    .normalize("NFD") // Decompone caracteres acentuados en base + diacrítico
+    .replace(/[\u0300-\u036f]/g, "") // Elimina los diacríticos
+    .toLowerCase();
+};
 
 function App() {
   const [games, setGames] = useState([])
@@ -75,8 +85,13 @@ function App() {
   // Filtrado de juegos con memoización para optimizar rendimiento
   const filteredGames = useMemo(() => {
     return games.filter((game) => {
-      // 1. Filtro por término de búsqueda
-      const searchMatch = game.titulo.toLowerCase().includes(searchTerm.toLowerCase())
+      // 1. Filtro por término de búsqueda (lógica mejorada y más flexible)
+      const normalizedSearch = normalizeString(searchTerm);
+      const searchWords = normalizedSearch.split(' ').filter(Boolean); // Separa en palabras y elimina vacíos
+      const normalizedTitle = normalizeString(game.titulo);
+
+      // Comprueba que todas las palabras buscadas estén en el título
+      const searchMatch = searchWords.every(word => normalizedTitle.includes(word));
 
       // 2. Filtro por plataforma
       const platformMatch = activeFilters.platform.length === 0 ||
@@ -114,98 +129,85 @@ function App() {
   return (
     <div className="app-wrapper">
       <HeroSection onSearch={setSearchTerm} />
+      
+      {loading ? (
+        <SkeletonLoader />
+      ) : (
+        <div className="content-area">
+          <Filters
+            platforms={allPlatforms}
+            genres={allGenres}
+            activeFilters={activeFilters}
+            onFilterChange={handleFilterChange}
+            isOpen={isFiltersOpen}
+            onClose={() => setIsFiltersOpen(false)}
+          />
 
-      <div className="content-area">
-        <Filters
-          platforms={allPlatforms}
-          genres={allGenres}
-          activeFilters={activeFilters}
-          onFilterChange={handleFilterChange}
-          isOpen={isFiltersOpen}
-          onClose={() => setIsFiltersOpen(false)}
-        />
+          <main>
+              {filteredGames.length > 0 ? (
+                <>
+                  <ul>
+                    {displayedGames.map((game, index) => (
+                      <motion.li 
+                        key={game.id} 
+                        custom={index}
+                        variants={itemVariants}
+                        initial="hidden"
+                        whileInView="visible"
+                        viewport={{ once: true, amount: 0.1 }}
+                      >
+                        <GameCard {...game} onClick={() => setSelectedGame(game)} />
+                      </motion.li>
+                    ))}
+                  </ul>
+                  {visibleCount < filteredGames.length && (
+                    <div className="load-more-container">
+                      <button className="load-more-button" onClick={() => setVisibleCount((prev) => prev + 20)}>
+                        Cargar más
+                      </button>
+                    </div>
+                  )}
+                </>
+              ) : (
+                <div className="no-results-container">
+                  <svg className="no-results-icon" xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M16 16s-1.5-2-4-2-4 2-4 2"></path><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg>
+                  <h2 className="no-results-title">Sin Resultados</h2>
+                  {searchTerm && (
+                    <p className="no-results-text">No encontramos nada para: <strong>"{searchTerm}"</strong></p>
+                  )}
+                  <p className="no-results-suggestion">Asegúrate de que el nombre esté bien escrito o prueba con otro juego.</p>
+                </div>
+              )}
 
-        <main>
-          {loading ? (
-            <div className="loading-container">
-              <div className="skull-loader">
-                <div className="spinner-ring"></div>
-                <svg 
-                  className="skull-icon"
-                  xmlns="http://www.w3.org/2000/svg" 
-                  viewBox="0 0 24 24" 
-                  fill="currentColor"
-                >
-                  <path d="M12 2c-5 0-9 4-9 9 0 2.5 1 4.5 3 6v3h2v-2h2v2h2v-2h2v2h2v-3c2-1.5 3-3.5 3-6 0-5-4-9-9-9zm-2.5 10c-1.4 0-2.5-1.1-2.5-2.5S8.1 7 9.5 7s2.5 1.1 2.5 2.5-1.1 2.5-2.5 2.5zm5 0c-1.4 0-2.5-1.1-2.5-2.5S13.1 7 14.5 7s2.5 1.1 2.5 2.5-1.1 2.5-2.5 2.5z"/>
-                </svg>
-              </div>
-              <p className="loading-text">Cargando...</p>
-            </div>
-          ) : (
-            filteredGames.length > 0 ? (
-              <>
-                <ul>
-                  {displayedGames.map((game, index) => (
-                    <motion.li 
-                      key={game.id} 
-                      custom={index}
-                      variants={itemVariants}
-                      initial="hidden"
-                      whileInView="visible"
-                      viewport={{ once: true, amount: 0.1 }}
-                    >
-                      <GameCard {...game} onClick={() => setSelectedGame(game)} />
-                    </motion.li>
-                  ))}
-                </ul>
-                {visibleCount < filteredGames.length && (
-                  <div className="load-more-container">
-                    <button className="load-more-button" onClick={() => setVisibleCount((prev) => prev + 20)}>
-                      Cargar más
-                    </button>
-                  </div>
-                )}
-              </>
-            ) : (
-              <div className="no-results-container">
-                <svg className="no-results-icon" xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M16 16s-1.5-2-4-2-4 2-4 2"></path><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg>
-                <h2 className="no-results-title">Sin Resultados</h2>
-                {searchTerm && (
-                  <p className="no-results-text">No encontramos nada para: <strong>"{searchTerm}"</strong></p>
-                )}
-                <p className="no-results-suggestion">Asegúrate de que el nombre esté bien escrito o prueba con otro juego.</p>
-              </div>
-            )
-          )}
-
-          <div className="sticky-buttons-container">
-            <button 
-              className="mobile-filter-toggle" 
-              onClick={() => setIsFiltersOpen(true)}
-              aria-label="Abrir filtros"
-            >
-              <SlidersHorizontal size={20} />
-              <span>Filtros</span>
-            </button>
-            {showScrollTop && (
+            <div className="sticky-buttons-container">
               <button 
-                className="scroll-top-button" 
-                onClick={scrollToTop} 
-                aria-label="Volver arriba"
+                className="mobile-filter-toggle" 
+                onClick={() => setIsFiltersOpen(true)}
+                aria-label="Abrir filtros"
               >
-                <svg 
-                  xmlns="http://www.w3.org/2000/svg" 
-                  width="24" height="24" viewBox="0 0 24 24" 
-                  fill="none" stroke="currentColor" strokeWidth="2" 
-                  strokeLinecap="round" strokeLinejoin="round"
-                >
-                  <path d="M18 15l-6-6-6 6"/>
-                </svg>
+                <SlidersHorizontal size={20} />
+                <span>Filtros</span>
               </button>
-            )}
-          </div>
-        </main>
-      </div>
+              {showScrollTop && (
+                <button 
+                  className="scroll-top-button" 
+                  onClick={scrollToTop} 
+                  aria-label="Volver arriba"
+                >
+                  <svg 
+                    xmlns="http://www.w3.org/2000/svg" 
+                    width="24" height="24" viewBox="0 0 24 24" 
+                    fill="none" stroke="currentColor" strokeWidth="2" 
+                    strokeLinecap="round" strokeLinejoin="round"
+                  >
+                    <path d="M18 15l-6-6-6 6"/>
+                  </svg>
+                </button>
+              )}
+            </div>
+          </main>
+        </div>
+      )}
 
       {/* Modal de Detalles del Juego */}
       <AnimatePresence>

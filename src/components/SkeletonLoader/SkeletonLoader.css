@@ -1,0 +1,64 @@
+/* =========================================
+   Skeleton Loader Styles
+   ========================================= */
+
+/* Animación de brillo (shimmer) */
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+/* Base para los elementos skeleton con la animación aplicada */
+.skeleton-filters,
+.skeleton-card,
+.skeleton-filters__header,
+.skeleton-filters__group {
+  background-image: linear-gradient(to right, #1a1a1a 0%, #2a2a2a 20%, #1a1a1a 40%, #1a1a1a 100%);
+  background-repeat: no-repeat;
+  background-size: 2000px 100%; 
+  animation: shimmer 2s infinite linear;
+}
+
+/* --- Skeleton para Filtros --- */
+.skeleton-filters {
+  display: none; /* Oculto en mobile por defecto */
+}
+
+@media (min-width: 1024px) {
+  .skeleton-filters {
+    display: block;
+    position: sticky;
+    top: 20px;
+    height: calc(100vh - 40px);
+    width: 25%;
+    flex-shrink: 0;
+    border-radius: 16px;
+    background-color: #1a1a1a;
+    padding: 1.5rem;
+    box-sizing: border-box;
+  }
+
+  .skeleton-filters__header {
+    height: 24px;
+    width: 50%;
+    margin-bottom: 2rem;
+    border-radius: 8px;
+  }
+
+  .skeleton-filters__group {
+    height: 200px;
+    margin-bottom: 1.5rem;
+    border-radius: 16px;
+  }
+}
+
+/* --- Skeleton para Tarjetas --- */
+.skeleton-card {
+  height: 300px; /* Coincide con la altura de GameCard */
+  border-radius: 16px;
+  background-color: #1a1a1a;
+}

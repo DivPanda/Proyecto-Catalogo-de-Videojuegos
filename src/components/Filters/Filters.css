@@ -48,7 +48,12 @@
   gap: 0.75rem;
   font-size: 1.2rem;
   font-weight: 600;
-  /* Aplicamos el degradado del HeroSection */
+  /* El color se aplicará al icono SVG, usando el cian neón del tema */
+  color: #00E5FF;
+}
+
+.filters-header-title span {
+  /* Aplicamos el degradado solo al texto para que no afecte al icono */
   background: linear-gradient(90deg, #00E5FF 50%, #FF007A 100%);
   -webkit-background-clip: text;
   background-clip: text;
